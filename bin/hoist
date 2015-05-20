@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-require "shipwright/cli/hoist"
+require "shipwright"
 Shipwright::CLI::Hoist.start(ARGV)
