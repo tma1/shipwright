@@ -4,6 +4,7 @@ Shipwright is a ruby cli used for assisting implementations of the
 [harbor pattern](#) for cloud operations on AWS Elastic Beanstalk. 
 
 Shipwright provides three binaries to assist in deployment:
+
 1. `hoist` a utility for fetching and setting enviroment variables on elastic
 beanstalk instances
 1. `ship` the cli interface for creating elastic beanstalk applications and
