@@ -1,6 +1,4 @@
-require 'aws-sdk'
 require 'thor'
-require 'shipwright'
 
 module Shipwright
   class CLI < Thor
@@ -12,3 +10,7 @@ module Shipwright
 
   end
 end
+
+require 'shipwright/cli/harbor'
+require 'shipwright/cli/hoist'
+require 'shipwright/cli/ship'

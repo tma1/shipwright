@@ -5,11 +5,11 @@ module Shipwright
 
     AWS_NAMESPACE = 'aws:elasticbeanstalk:application:environment'.freeze
 
-    def self.down(app_name, env_name)
+    def self.pull(app_name, env_name)
       new(app_name, env_name).down
     end
 
-    def self.up(app_name, env_name)
+    def self.push(app_name, env_name)
       new(app_name, env_name).up
     end
 
