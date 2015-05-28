@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require "shipwright/cli"
+Shipwright::CLI.start(ARGV)

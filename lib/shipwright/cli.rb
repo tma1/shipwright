@@ -1,4 +1,5 @@
 require 'thor'
+require 'shipwright'
 
 module Shipwright
   class CLI < Thor
@@ -8,9 +9,9 @@ module Shipwright
       puts "shipwright version: #{Shipwright::VERSION}"
     end
 
+    desc "build", "Build and push docker image"
+    def build(base=Dir.pwd)
+      Shipwright::Builder.build(base)
+    end
   end
 end
-
-require 'shipwright/cli/harbor'
-require 'shipwright/cli/hoist'
-require 'shipwright/cli/ship'
