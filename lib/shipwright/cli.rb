@@ -12,7 +12,7 @@ module Shipwright
     desc "build [base] [shipyard]", "Build and push docker image"
     def build(base=Dir.pwd, shipyard=nil)
       Shipwright::Builder.build(base, shipyard)
-    rescue MissingShipyardError
+    rescue Shipwright::Builder::MissingShipyardError
       puts "Set SHIPYARD in your environment or pass it to the build command"
       exit 1
     end
