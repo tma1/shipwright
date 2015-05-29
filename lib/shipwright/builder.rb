@@ -7,10 +7,10 @@ module Shipwright
     COMMIT_MESSAGE = "new version %s built by Shipwright #{Shipwright::VERSION}\n
     [ci skip]"
 
-    attr_accessor :path, :commit_message, :previous_version, :version
+    attr_accessor :path, :commit_message, :previous_version, :version, :shipyard
 
-    def self.build(path)
-      new(path).build
+    def self.build(path, shipyard = nil)
+      new(path).tap { |b| b.shipyard = shipyard }.build
     end
 
     def self.bump
@@ -31,10 +31,10 @@ module Shipwright
 
     def initialize(path)
       self.path = path
-      shipyard
     end
 
     def build
+      shipyard
       self.class.init
       Shipwright.info "Shipwright is building #{path} (at #{self.class.version})"
 
@@ -113,7 +113,9 @@ module Shipwright
     end
 
     def shipyard
-      ENV.fetch('SHIPYARD') { raise "set SHIPYARD= to your docker host/scope" }
+      @shipyard ||= ENV.fetch('SHIPYARD')
+    rescue KeyError
+      raise MissingShipyardError
     end
 
     def application
@@ -127,6 +129,8 @@ module Shipwright
     def git
       @git ||= Git.open(Dir.pwd)
     end
+
+    MissingShipyardError = Class.new(StandardError)
 
   end
 end
