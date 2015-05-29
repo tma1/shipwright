@@ -74,7 +74,13 @@ module Shipwright
     end
 
     def run_cmd(cmd)
-      IO.popen(cmd).each { |line| Shipwright.info line.chomp }
+      io = IO.popen(cmd)
+      io.each { |line| Shipwright.info line.chomp }
+      io.close
+      unless $?.exitstatus.zero?
+        puts "Command #{cmd} exitted with non zero status #{$?.exitstatus}"
+        exit $?.exitstatus
+      end
     end
 
     def update_dockerrun
