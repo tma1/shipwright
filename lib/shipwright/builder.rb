@@ -70,7 +70,7 @@ module Shipwright
     end
 
     def run_cmd(cmd)
-      IO.popen(cmd).each { |line| Shipwright.info line }
+      IO.popen(cmd).each { |line| Shipwright.info line.chomp }
     end
 
     def update_dockerrun
