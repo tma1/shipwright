@@ -4,7 +4,8 @@ module Shipwright
     BASE_VERSION   = '1.0.0'
     VERSION_FILE   = 'VERSION'
     DOCKERRUN      = 'Dockerrun.aws.json'
-    COMMIT_MESSAGE = "new version %s built by Shipwright #{Shipwright::VERSION}"
+    COMMIT_MESSAGE = "new version %s built by Shipwright #{Shipwright::VERSION}\n
+    [ci skip]"
 
     attr_accessor :path, :commit_message, :previous_version, :version
 
@@ -30,6 +31,7 @@ module Shipwright
 
     def initialize(path)
       self.path = path
+      shipyard
     end
 
     def build
@@ -41,7 +43,7 @@ module Shipwright
       build_image
       push_image
 
-      generate_dockerrun
+      update_dockerrun
       generate_artifact
       update_ebconfig
 
@@ -57,17 +59,23 @@ module Shipwright
 
     def build_image
       Shipwright.info "Building image with tag #{docker_tag}"
-      self.image = Docker::Image.build_from_dir(path, 'tag' => docker_tag)
+      run_cmd "docker build -t #{docker_tag} #{path}"
+      # self.image = Docker::Image.build_from_dir(path, 'tag' => docker_tag)
     end
 
     def push_image
       Shipwright.info "Pushing image to #{docker_tag}"
-      image.push
+      run_cmd "docker push #{docker_tag}"
+      # image.push
     end
 
-    def generate_dockerrun
-      Shipwright.info "Generating Dockerrun"
-      Shipwright::ElasticBeanstalk.generate_dockerrun
+    def run_cmd(cmd)
+      IO.popen(cmd).each { |line| Shipwright.info line }
+    end
+
+    def update_dockerrun
+      Shipwright.info "Updating Dockerrun.aws.json"
+      Shipwright::ElasticBeanstalk.update_dockerrun
     end
 
     def generate_artifact
@@ -77,7 +85,7 @@ module Shipwright
 
     def update_ebconfig
       Shipwright.info "Updating .elasticbeanstalk/config.yml"
-      Shipwright::ElasticBeanstalk.update_config
+      Shipwright::ElasticBeanstalk.update_ebconfig
     end
 
     def git_commit
@@ -89,7 +97,7 @@ module Shipwright
 
     def git_push
       Shipwright.info "Pushing to git"
-      git.push
+      git.push 'origin', git.current_branch, tags: true
     end
 
     def git_tag

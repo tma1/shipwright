@@ -25,9 +25,14 @@ module Shipwright
 
     def generate_artifact
       FileUtils.mkdir_p File.dirname(artifact_path)
+      FileUtils.rm artifact_path, force: true
       Zip::File.open(artifact_path, Zip::File::CREATE) do |zip|
-        zip.add DOCKERRUN
-        Dir.glob(File.join EB_EXTENSIONS, '*').each(&zip.method(:add))
+        zip.add DOCKERRUN, DOCKERRUN
+        ebexts = Dir.glob(File.join EB_EXTENSIONS, '*')
+        if ebexts.any?
+          zip.mkdir EB_EXTENSIONS
+          ebexts.each { |ext| zip.add ext, ext }
+        end
       end
     end
 

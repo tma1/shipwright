@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'bump',       '~> 0.5'
   spec.add_dependency 'docker-api', '~> 1.21.4'
   spec.add_dependency 'git',        '~> 1.2.9'
+  spec.add_dependency 'rubyzip',    '~> 1.1.7'
 
   spec.add_development_dependency "bundler", "~> 1.9"
   spec.add_development_dependency "rake",    "~> 10.0"

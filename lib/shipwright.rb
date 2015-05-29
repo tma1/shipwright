@@ -26,3 +26,4 @@ module Shipwright
 end
 
 require 'shipwright/builder'
+require 'shipwright/elastic_beanstalk'
