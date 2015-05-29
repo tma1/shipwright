@@ -20,7 +20,8 @@ module Shipwright
         container['image'] = bits.push(version).join(':')
       end
 
-      File.open(DOCKERRUN, 'wb') { |file| file.write dockerrun.to_json }
+      File.open(DOCKERRUN, 'wb') { |file|
+        file.write JSON.pretty_generate(dockerrun) }
     end
 
     def generate_artifact
@@ -41,10 +42,11 @@ module Shipwright
       config['deploy'] ||= {}
       config['deploy']['artifact'] = artifact_path
       File.open(EB_CONFIG, 'wb') { |f| f.write config.to_yaml[4..-1] } # skip ---\n
+    rescue Errno::ENOENT
     end
 
     def artifact_path
-      File.join Dir.pwd, 'builds', "#{version}.zip"
+      File.join Dir.pwd, 'builds', "#{application}-#{version}.zip"
     end
 
     def version
