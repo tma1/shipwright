@@ -53,5 +53,9 @@ module Shipwright
       Builder.version
     end
 
+    def application
+      Builder.application
+    end
+
   end
 end

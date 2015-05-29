@@ -29,6 +29,10 @@ module Shipwright
       Bump::Bump.version_from_version.tap { |v| return v.first if v }
     end
 
+    def self.application
+      File.basename Dir.pwd
+    end
+
     def initialize(path)
       self.path = path
     end
@@ -119,7 +123,7 @@ module Shipwright
     end
 
     def application
-      File.basename Dir.pwd
+      @application ||= self.class.application
     end
 
     protected
