@@ -27,3 +27,4 @@ end
 
 require 'shipwright/builder'
 require 'shipwright/elastic_beanstalk'
+require 'shipwright/elastic_beanstalk/dockerrun'

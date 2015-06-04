@@ -13,15 +13,8 @@ module Shipwright
     extend self
 
     def update_dockerrun
-      dockerrun  = JSON.parse(File.read DOCKERRUN)
-
-      dockerrun['containerDefinitions'].each do |container|
-        bits = container['image'].to_s.split(':').tap(&:pop)
-        container['image'] = bits.push(version).join(':')
-      end
-
-      File.open(DOCKERRUN, 'wb') { |file|
-        file.write JSON.pretty_generate(dockerrun) }
+      dockerrun = Dockerrun.new(DOCKERRUN, version)
+      dockerrun.update!
     end
 
     def generate_artifact
