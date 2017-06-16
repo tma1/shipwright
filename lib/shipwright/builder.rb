@@ -26,7 +26,7 @@ module Shipwright
     end
 
     def self.version
-      Bump::Bump.version_from_version.tap { |v| return v.first if v }
+      Bump::Bump.current
     end
 
     def self.application
